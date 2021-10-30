@@ -1,6 +1,5 @@
 import ReactPlayer from 'react-player/youtube'
 import React, { useState } from 'react';
-import './PartyDJMain.css';
 
 const PartyDJMain = (props) => {
 
