@@ -1,0 +1,4 @@
+1. We want to separate pausing the player from the `playing` state variable to simply
+    code retrieving currentVideo / queue / updating the playing variable
+2. Add some CSS to the application
+3. Create docker containers for front and back end
