@@ -15,7 +15,7 @@ In the project directory, you can run:
 
 ### Create .env file
 
-First create a `.env` file from the template
+First create a `.env` file from the template\
 `cp .env.template .env`
 
 Update the REACT_APP variable to have the `protocol://ip:port` of your running partydj-server
