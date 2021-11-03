@@ -13,7 +13,9 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 In the project directory, you can run:
 
-### copy `.env.template` to `.env` and add the `protocol://ip:port` of your running partydj-server
+### Create .env file
+
+copy `.env.template` to `.env` and add the `protocol://ip:port` of your running partydj-server
 
 ### `npm start`
 
