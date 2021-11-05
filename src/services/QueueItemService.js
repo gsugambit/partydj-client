@@ -30,10 +30,12 @@ function retrieveQueue(stationId) {
   return axios.get(url);
 }
 
-export default {
+const queueItemService = {
   addQueueItem,
   clearQueue,
   ended,
   getCurrentVideo,
   retrieveQueue,
 };
+
+export default queueItemService;

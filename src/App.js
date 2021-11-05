@@ -1,6 +1,6 @@
 import "./App.css";
 import NavBar from "./components/NavBar";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import PartyDJMain from "./pages/PartyDJMain";
 import Stations from "./pages/Stations";
 import Station from "./components/Station";

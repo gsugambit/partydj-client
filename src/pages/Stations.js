@@ -6,8 +6,8 @@ const Stations = (props) => {
       <ul>
         {props.stations.map((station) => {
           return (
-            <Link to={`/stations/${station.id}`}>
-              <li key={station.id}>{station.name}</li>
+            <Link key={`link_${station.id}`} to={`/stations/${station.id}`}>
+              <li>{station.name}</li>
             </Link>
           );
         })}

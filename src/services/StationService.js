@@ -17,8 +17,10 @@ function retrieveStation(id) {
   return axios.get(url);
 }
 
-export default {
+const stationService = {
   create,
   getAllStations,
   retrieveStation,
 };
+
+export default stationService;

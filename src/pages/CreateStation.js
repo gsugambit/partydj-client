@@ -4,23 +4,17 @@ import stationService from "../services/StationService";
 const CreateStation = (props) => {
   const [stationName, setStationName] = useState("");
 
-  const createStation = async (e) => {
+  const createStation = (e) => {
     e.preventDefault();
-    console.log(e);
 
     const newStation = {
       name: stationName,
     };
 
-    try {
-      console.log(`trying to create station: ${JSON.stringify(newStation)}`);
-      const station = await stationService.create(newStation);
-      console.log(`created station ${JSON.stringify(station)}`);
-      props.refreshStations();
-    } catch (error) {
-      console.error(error);
-      alert(JSON.stringify(error.response.data));
-    }
+    return stationService
+      .create(newStation)
+      .then(() => props.refreshStations())
+      .error((error) => console.error(error));
   };
 
   return (
@@ -30,7 +24,6 @@ const CreateStation = (props) => {
         <input
           value={stationName}
           onChange={(e) => {
-            console.log(e);
             setStationName(e.target.value);
           }}
         />

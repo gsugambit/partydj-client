@@ -3,221 +3,100 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 import queueItemService from "../services/QueueItemService";
-import { useAsync } from "react-use";
+
 import stationService from "../services/StationService";
 
-const Station = (props) => {
-  const [queue, setQueue] = useState([]);
-  const [url, setUrl] = useState("");
+const Station = () => {
+  const [currentVideo, setCurrentVideo] = useState({});
   const [playing, setPlaying] = useState(false);
+  const [queue, setQueue] = useState([]);
   const [station, setStation] = useState(null);
+  const [url, setUrl] = useState("");
 
   const { id } = useParams();
 
-  const retrieveStation = async () => {
-    try {
-      console.log("retrieving station with id", id);
-      const serverStation = await stationService.retrieveStation(id);
-      console.log(
-        `retrieved station with id ${JSON.stringify(serverStation.data)}`
-      );
-      setStation(serverStation.data);
-      setQueue(serverStation.data.queue);
-    } catch (error) {
-      console.error(error);
-    }
+  const setStationOnLoad = () => {
+    return stationService
+      .retrieveStation(id)
+      .then((response) => setStation(response.data))
+      .catch((error) => console.error(error));
   };
+
+  useEffect(() => {
+    setStationOnLoad();
+  }, []);
 
   useEffect(() => {
     getCurrentVideo();
   }, [station]);
 
-  useAsync(retrieveStation);
+  useEffect(() => {
+    getQueue();
+  }, [station]);
 
-  const [currentVideo, setCurrentVideo] = useState({});
+  const addToQueue = async () => {
+    const newQueueItem = {
+      url,
+      user: "GSUGambitCodes",
+      stationId: station.id,
+    };
 
-  const textChange = (e) => {
-    setUrl(e.target.value);
-  };
-
-  const onClick = async (e) => {
-    try {
-      const newQueueItem = {
-        url,
-        user: "GSUGambitCodes",
-        stationId: station.id,
-      };
-      const queueItem = await queueItemService.addQueueItem(
-        station.id,
-        newQueueItem
-      );
-      console.log(
-        `video successfully sent to server: ${JSON.stringify(queueItem.data)}`
-      );
-      getCurrentVideo();
-      getQueue();
-      setUrl("");
-    } catch (error) {
-      console.error(error);
-    }
+    return queueItemService
+      .addQueueItem(station.id, newQueueItem)
+      .then((response) => {
+        setStation(response.data);
+        setUrl("");
+      })
+      .catch((error) => console.error(error));
   };
 
   const getCurrentVideo = async () => {
     if (!station) {
-      console.log("we have no station");
       return;
     }
 
-    try {
-      console.log("requesting next video");
-      const currentQueueItem = await queueItemService.getCurrentVideo(
-        station.id
-      );
-      console.log(
-        !currentQueueItem.data
-          ? "server returned no current video"
-          : `server return: ${JSON.stringify(currentQueueItem.data)}`
-      );
-      if (currentQueueItem.data) {
-        setCurrentVideo(currentQueueItem.data);
-      } else {
-        setCurrentVideo(null);
-      }
-    } catch (error) {
-      console.error(error);
-      setCurrentVideo(null);
-    }
+    return queueItemService
+      .getCurrentVideo(station.id)
+      .then((response) => setCurrentVideo(response.data ? response.data : null))
+      .catch((error) => console.error(error));
   };
 
   const getQueue = async () => {
     if (!station) {
       return;
     }
-    let queue = [];
-    try {
-      console.log("retrieving the queue from the server.");
-      const serverQueue = await queueItemService.retrieveQueue(station.id);
-      console.log(`server returned queue: ${JSON.stringify(serverQueue.data)}`);
-      if (serverQueue && serverQueue.data) {
-        queue = serverQueue.data;
-      }
-    } catch (error) {
-      console.error(error);
-    }
 
-    setQueue(queue);
+    return queueItemService
+      .retrieveQueue(station.id)
+      .then((response) => setQueue(response.data))
+      .catch((error) => console.error(error));
   };
 
-  const onEnded = async (currentVideo, e) => {
-    console.log(currentVideo, " has ended");
-
+  const endCurrentVideo = async (currentVideo) => {
     setPlaying(false);
 
-    try {
-      const playedItem = await queueItemService.ended(
-        station.id,
-        currentVideo.id
-      );
-      console.log(`updated to be played: ${JSON.stringify(playedItem.data)}`);
-    } catch (error) {
-      console.log(error);
-    }
+    return queueItemService
+      .ended(station.id, currentVideo.id)
+      .then(() => {
+        getQueue();
+        getCurrentVideo();
 
-    getQueue();
-    getCurrentVideo();
-    if (!playing && currentVideo && currentVideo.url) {
-      setPlaying(true);
-    }
-  };
-
-  const onReady = () => {
-    setPlaying(true);
-  };
-
-  const onPlayClick = () => {
-    if (playing) {
-      setPlaying(false);
-    }
-
-    const currentVideo = getCurrentVideo();
-    if (!playing && currentVideo && currentVideo.url) {
-      setPlaying(true);
-    }
-  };
-
-  const onSkipClick = async (currentVideo, e) => {
-    console.log(
-      `onSkipClick called with video: ${JSON.stringify(currentVideo)}`
-    );
-    setPlaying(false);
-
-    try {
-      const skippedVideo = await queueItemService.ended(
-        station.id,
-        currentVideo.id
-      );
-      console.log(`skipped video: ${JSON.stringify(skippedVideo.data)}`);
-    } catch (error) {
-      console.error(error);
-    }
-
-    getQueue();
-    getCurrentVideo();
-
-    if (!playing && currentVideo && currentVideo.url) {
-      setPlaying(true);
-    }
-  };
-
-  const onError = (e) => {
-    console.log("onError below");
-    console.log(e);
-  };
-
-  const onPlayerChange = (e) => {
-    console.log("onPlayerChange below");
-    console.log(e);
+        if (!playing && currentVideo && currentVideo.url) {
+          setPlaying(true);
+        }
+      })
+      .catch((error) => console.error(error));
   };
 
   const onClearQueue = () => {
-    try {
-      queueItemService.clearQueue(station.id);
-    } catch (error) {
-      console.error(error);
-    }
-
     setPlaying(false);
-    getQueue();
-    getCurrentVideo();
+    return queueItemService
+      .clearQueue(station.id)
+      .then((response) => setStation(response.data))
+      .catch((error) => console.error(error));
   };
 
-  useEffect(() => {
-    // You need to restrict it at some point
-    // This is just dummy code and should be replaced by actual
-    if (!currentVideo || Object.keys(currentVideo).length === 0) {
-      getCurrentVideo();
-    }
-  }, []);
-
-  useEffect(() => {
-    // You need to restrict it at some point
-    // This is just dummy code and should be replaced by actual
-    if (!queue || queue.length == 0) {
-      getQueue();
-    }
-  }, []);
-
-  // const currentVideo = getNextVideo();
-  console.log(`the queue is: ${JSON.stringify(queue)}`);
-
-  if (currentVideo && currentVideo.url) {
-    console.log(`${JSON.stringify(currentVideo)} is playing: ${playing}`);
-  } else {
-    console.log("nothing is playing");
-  }
-
   const loadingContent = <p>loading please wait</p>;
-
   if (!station) {
     return <div className="station">{loadingContent}</div>;
   }
@@ -227,29 +106,43 @@ const Station = (props) => {
       {!station && loadingContent}
       <h1>{station.name}</h1>
       <p>
-        Enter youtube video: <input onChange={textChange} value={url} />
+        Enter youtube video:{" "}
+        <input onChange={(e) => setUrl(e.target.value)} value={url} />
       </p>
-      <button type="submit" onClick={onClick}>
+      <button type="submit" onClick={addToQueue}>
         Submit
       </button>
       {currentVideo && currentVideo.url && (
         <ReactPlayer
           url={currentVideo.url}
           volume={1}
-          onReady={onReady}
-          onChange={onPlayerChange}
+          onReady={() => setPlaying(true)}
+          onChange={(e) => console.error("onChange: ", e)}
           playing={playing}
-          onEnded={(e) => onEnded(currentVideo, e)}
-          onError={onError}
+          onEnded={(e) => endCurrentVideo(currentVideo, e)}
+          onError={(e) => console.error("onError: ", e)}
         />
       )}
       {currentVideo && currentVideo.url && (
-        <button onClick={onPlayClick}>{playing ? "Pause" : "Play"}</button>
+        <button onClick={() => setPlaying(playing ? false : true)}>
+          {playing ? "Pause" : "Play"}
+        </button>
       )}
       {currentVideo && currentVideo.url && (
-        <button onClick={(e) => onSkipClick(currentVideo, e)}>Skip</button>
+        <button onClick={(e) => endCurrentVideo(currentVideo, e)}>Skip</button>
       )}
       {<button onClick={onClearQueue}>Clear Queue</button>}
+
+      <ul>
+        {queue
+          .slice(1)
+          .filter((item) => !item.played)
+          .map((queueItem) => (
+            <li key={queueItem.id}>
+              {queueItem.index}: {queueItem.url}
+            </li>
+          ))}
+      </ul>
     </div>
   );
 };
