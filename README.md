@@ -43,9 +43,14 @@ dependencies and running this app on your local machine
 
 ### Docker build
 
+If you have not created the docker network before, run the following command
 `docker network create partydj_network`
+
+Now you can build the docker image locally and create
 `docker build -t gsugambit/partydj-client .`
 `docker-compose up -d`
+
+the application will run on `http://localhost:19192`
 
 The docker compose file is expecting `partydj-server` to be run on same docker \
 network. If you are running the server in a different way override the
