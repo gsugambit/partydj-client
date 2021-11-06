@@ -1,11 +1,4 @@
-import axios from "axios";
-
-const headers = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "Origin, X-Requested-With, Content-Type, Accept",
-  "Access-Control-Allow-Methods": "GET, POST, DELETE, PUT",
-};
+import axios from "../util/AxiosIntercepted";
 
 function create(newStation) {
   const url = `/partydj/api/v1/station`;

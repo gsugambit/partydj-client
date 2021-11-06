@@ -38,10 +38,6 @@ app.use(
   })
 );
 
-app.use("/", (req, res) => {
-  res.send("you have found PartyDJ Client Express Server");
-});
-
 app.use(express.json());
 app.use("/**", (req, res) => {
   req.url = "index.html";
