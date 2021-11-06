@@ -4,4 +4,11 @@
 !src
 !package*
 
-/node_modules
+.git
+.cache
+*.md
+
+node_modules
+build
+.dockerignore
+Dockerfile

@@ -1,18 +1,18 @@
-const express = require("express");
-const morgan = require("morgan");
-// const helmet = require("helmet");
 const cors = require("cors");
-const path = require("path");
 const createProxyMiddleware = require("http-proxy-middleware");
-
+const express = require("express");
+// const helmet = require("helmet");
 const middlewares = require("./middlewares");
+const morgan = require("morgan");
+const path = require("path");
 
 const app = express();
 
 app.use(morgan("dev"));
-// app.use(helmet());
 app.use(cors());
 app.use(express.static(path.join(__dirname, "..", "build")));
+
+// app.use(helmet());
 // app.use(
 //   helmet({
 //     frameguard: {
@@ -37,6 +37,10 @@ app.use(
     },
   })
 );
+
+app.use("/", (req, res) => {
+  res.send("you have found PartyDJ Client Express Server");
+});
 
 app.use(express.json());
 app.use("/**", (req, res) => {

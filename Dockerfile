@@ -10,6 +10,7 @@ WORKDIR /app
 COPY . /app
 RUN npm ci --production \
     && npm run build
+
 ENV NODE_PORT=$NODE_PORT
 
 ENV PARTYDJ_SERVER_DOMAIN=http://partydj-server
