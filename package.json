@@ -23,10 +23,12 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "build:docker": "docker build -t gsugambit/partydj-client .",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "start:server": "node server/index.js",
-    "start:local": "concurrently \"npm run start:server\" \"npm start\""
+    "start:local": "concurrently \"npm run start:server\" \"npm start\"",
+    "start:docker": "docker-compose up -d"
   },
   "proxy": "http://localhost:5000",
   "eslintConfig": {
