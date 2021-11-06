@@ -1,0 +1,50 @@
+const express = require("express");
+const morgan = require("morgan");
+// const helmet = require("helmet");
+const cors = require("cors");
+const path = require("path");
+const createProxyMiddleware = require("http-proxy-middleware");
+
+const middlewares = require("./middlewares");
+
+const app = express();
+
+app.use(morgan("dev"));
+// app.use(helmet());
+app.use(cors());
+app.use(express.static(path.join(__dirname, "..", "build")));
+// app.use(
+//   helmet({
+//     frameguard: {
+//       action: "SAMEORIGIN",
+//     },
+//     contentSecurityPolicy: {
+//       directives: {
+//         ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+//         "script-src": ["self", "unsafe-inline", "partydj.gsugambit.com"],
+//       },
+//     },
+//   })
+// );
+
+app.use(
+  createProxyMiddleware("/partydj", {
+    target: process.env.PARTYDJ_SERVER_DOMAIN,
+    changeOrigin: true,
+    logLevel: "warn",
+    pathRewrite: {
+      "^/partydj": "",
+    },
+  })
+);
+
+app.use(express.json());
+app.use("/**", (req, res) => {
+  req.url = "index.html";
+  app.handle(req, res);
+});
+
+app.use(middlewares.notFound);
+app.use(middlewares.errorHandler);
+
+module.exports = app;

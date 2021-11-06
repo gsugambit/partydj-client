@@ -14,7 +14,8 @@ const CreateStation = (props) => {
     return stationService
       .create(newStation)
       .then(() => props.refreshStations())
-      .error((error) => console.error(error));
+      .then(() => setStationName(""))
+      .catch((error) => console.error(error));
   };
 
   return (

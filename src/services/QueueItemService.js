@@ -1,32 +1,34 @@
 import axios from "axios";
 
-const partyDjServerDomain = process.env.REACT_APP_PARTYDJ_SERVER_DOMAIN;
+const headers = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers":
+    "Origin, X-Requested-With, Content-Type, Accept",
+  "Access-Control-Allow-Methods": "GET, POST, DELETE, PUT",
+};
 
 function addQueueItem(stationId, newQueueItem) {
-  const url = `${partyDjServerDomain}/api/v1/queue/${stationId}/queue-item`;
+  const url = `/partydj/api/v1/queue/${stationId}/queue-item`;
   return axios.post(url, newQueueItem);
 }
 
 function clearQueue(stationId) {
-  const url = `${partyDjServerDomain}/api/v1/queue/${stationId}/delete-queue`;
+  const url = `/partydj/api/v1/queue/${stationId}/delete-queue`;
   return axios.delete(url);
 }
 
 function ended(stationId, id) {
-  const url = `${partyDjServerDomain}/api/v1/queue/${stationId}/queue-item/played/${id}`;
-  const headers = {
-    "content-type": "application/json",
-  };
-  return axios.put(url, {}, { headers });
+  const url = `/partydj/api/v1/queue/${stationId}/queue-item/played/${id}`;
+  return axios.put(url, {});
 }
 
 function getCurrentVideo(stationId) {
-  const url = `${partyDjServerDomain}/api/v1/queue/${stationId}/current-item`;
+  const url = `/partydj/api/v1/queue/${stationId}/current-item`;
   return axios.get(url);
 }
 
 function retrieveQueue(stationId) {
-  const url = `${partyDjServerDomain}/api/v1/queue/${stationId}/queue-item`;
+  const url = `/partydj/api/v1/queue/${stationId}/queue-item`;
   return axios.get(url);
 }
 

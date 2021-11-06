@@ -1,0 +1,15 @@
+version: "3"
+services:
+  partydj-client:
+    image: gsugambit/partydj-client:latest
+    hostname: partydj-client
+    restart: always
+    ports:
+      - 19192:8080
+    environment:
+      PARTYDJ_SERVER_DOMAIN: http://partydj-server:8080
+networks:
+  default:
+    external:
+      name: partydj_network
+## docker network create partydj_network

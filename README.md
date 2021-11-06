@@ -36,8 +36,17 @@ It correctly bundles React in production mode and optimizes the build for the be
 The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed!
 
-## Learn More
+## Docker Runtime
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+If you would like, you can now run the docker container instead of installing \
+dependencies and running this app on your local machine
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Docker build
+
+`docker network create partydj_network`
+`docker build -t gsugambit/partydj-client .`
+`docker-compose up -d`
+
+The docker compose file is expecting `partydj-server` to be run on same docker \
+network. If you are running the server in a different way override the
+`PARTYDJ_SERVER_DOMAIN` property
