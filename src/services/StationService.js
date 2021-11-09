@@ -15,8 +15,14 @@ function retrieveStation(id) {
   return axios.get(url);
 }
 
+function deleteStation(id) {
+  const url = `/partydj/api/v1/station/${id}`;
+  return axios.delete(url);
+}
+
 const stationService = {
   create,
+  deleteStation,
   getAllStations,
   retrieveStation,
 };

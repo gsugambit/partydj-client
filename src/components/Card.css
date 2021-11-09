@@ -1,0 +1,38 @@
+.card {
+  box-shadow: 0 2px 20px lightgray;
+  border-radius: 0.2rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  transition: transform 200ms ease-in;
+}
+
+.card:hover {
+  transform: scale(1.1);
+}
+
+.card .card__body {
+  margin: 2rem;
+}
+
+.card .card_body .card__body__title {
+  padding: 2rem;
+}
+
+.card .card__button {
+  background: transparent;
+  border: 2px solid red;
+  border-radius: 0.2rem;
+  color: red;
+  font-weight: bold;
+  margin: 1rem;
+  padding: 1rem;
+  transition: background 200ms ease-in, color 200ms ease-in;
+}
+
+.card .card__button:hover {
+  background: black;
+  color: red;
+}
