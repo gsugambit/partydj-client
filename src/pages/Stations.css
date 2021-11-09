@@ -1,0 +1,18 @@
+.stations {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.stations .grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 16rem));
+  gap: 2rem;
+  justify-content: center;
+}
+
+.stations .station_item {
+  padding: 15px;
+  text-align: center;
+  border: 10px;
+}

@@ -29,7 +29,12 @@ function App() {
             <Route path="/" element={<PartyDJMain />} />
             <Route
               path="/stations"
-              element={<Stations stations={stations} />}
+              element={
+                <Stations
+                  stations={stations}
+                  refreshStations={refreshStations}
+                />
+              }
             />
             <Route path="/stations/:id" element={<Station />} />
             <Route

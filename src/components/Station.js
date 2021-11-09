@@ -6,12 +6,15 @@ import queueItemService from "../services/QueueItemService";
 
 import stationService from "../services/StationService";
 
+import "./Station.css";
+
 const Station = () => {
   const [currentVideo, setCurrentVideo] = useState({});
   const [playing, setPlaying] = useState(false);
   const [queue, setQueue] = useState([]);
   const [station, setStation] = useState(null);
   const [url, setUrl] = useState("");
+  const [volume, setVolume] = useState(0);
 
   const { id } = useParams();
 
@@ -96,6 +99,16 @@ const Station = () => {
       .catch((error) => console.error(error));
   };
 
+  const volumeControl = () => {
+    setVolume((prevVolume) => {
+      if (prevVolume === 0) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+  };
+
   const loadingContent = <p>loading please wait</p>;
   if (!station) {
     return <div className="station">{loadingContent}</div>;
@@ -113,15 +126,19 @@ const Station = () => {
         Submit
       </button>
       {currentVideo && currentVideo.url && (
-        <ReactPlayer
-          url={currentVideo.url}
-          volume={1}
-          onReady={() => setPlaying(true)}
-          onChange={(e) => console.error("onChange: ", e)}
-          playing={playing}
-          onEnded={(e) => endCurrentVideo(currentVideo, e)}
-          onError={(e) => console.error("onError: ", e)}
-        />
+        <div className="youtube">
+          <ReactPlayer
+            url={currentVideo.url}
+            volume={volume}
+            onReady={() => setPlaying(true)}
+            onChange={(e) => console.error("onChange: ", e)}
+            playing={playing}
+            onEnded={(e) => endCurrentVideo(currentVideo, e)}
+            onError={(e) => console.error("onError: ", e)}
+            pip={false}
+            controls={false}
+          />
+        </div>
       )}
       {currentVideo && currentVideo.url && (
         <button onClick={() => setPlaying(playing ? false : true)}>
@@ -131,7 +148,10 @@ const Station = () => {
       {currentVideo && currentVideo.url && (
         <button onClick={(e) => endCurrentVideo(currentVideo, e)}>Skip</button>
       )}
-      {<button onClick={onClearQueue}>Clear Queue</button>}
+      <button onClick={onClearQueue}>Clear Queue</button>
+      <button onClick={volumeControl}>
+        {volume === 0 ? "Unmute" : "Mute"}
+      </button>
 
       <ul>
         {queue
