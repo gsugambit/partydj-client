@@ -186,7 +186,9 @@ const Station = () => {
             <div key={response.videoId} className="grid__item">
               <Card
                 title={response.title}
-                imageUrl={response.thumbnailUrl}
+                imageUrl={response.thumbnail.url}
+                imageHeight={response.thumbnail.height}
+                imageWidth={response.thumbnail.width}
                 onBodyClick={() => {
                   addToQueue({
                     videoId: response.videoId,

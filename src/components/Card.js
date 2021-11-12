@@ -6,7 +6,11 @@ const Card = (props) => {
       <div className="card__body" onClick={props.onBodyClick}>
         <h2 className="card__body__title">{props.title}</h2>
         {props.imageUrl && (
-          <img className="card__body__image" src={props.imageUrl} />
+          <img
+            className="card__body__image"
+            src={props.imageUrl}
+            style={{ width: props.imageWidth, height: props.imageHeight }}
+          />
         )}
       </div>
       {props.buttonName && (
