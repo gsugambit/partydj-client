@@ -2,16 +2,18 @@ import ReactPlayer from "react-player/youtube";
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
+import Card from "../components/Card";
 import queueItemService from "../services/QueueItemService";
-
 import stationService from "../services/StationService";
-
+import youtubeSearchService from "../services/YoutubeSearchService";
 import "./Station.css";
 
 const Station = () => {
   const [currentVideo, setCurrentVideo] = useState({});
   const [playing, setPlaying] = useState(false);
   const [queue, setQueue] = useState([]);
+
+  const [searchResponse, setSearchResponse] = useState([]);
   const [station, setStation] = useState(null);
   const [url, setUrl] = useState("");
   const [volume, setVolume] = useState(0);
@@ -37,19 +39,28 @@ const Station = () => {
     getQueue();
   }, [station]);
 
-  const addToQueue = async () => {
+  const search = async () => {
+    return youtubeSearchService
+      .search(url)
+      .then((response) => setSearchResponse(response.data))
+      .then(() => setUrl(""))
+      .catch((error) => console.error(error));
+  };
+
+  const addToQueue = async (queueItem) => {
     const newQueueItem = {
-      url,
+      url: `https://youtube.com/watch?v=${queueItem.videoId}`,
       user: "GSUGambitCodes",
       stationId: station.id,
+      ...queueItem,
     };
 
     return queueItemService
       .addQueueItem(station.id, newQueueItem)
       .then((response) => {
         setStation(response.data);
-        setUrl("");
       })
+      .then(() => setSearchResponse([]))
       .catch((error) => console.error(error));
   };
 
@@ -114,15 +125,20 @@ const Station = () => {
     return <div className="station">{loadingContent}</div>;
   }
 
+  let searching = false;
+  if (searchResponse.length > 0) {
+    searching = true;
+  }
+
   return (
     <div className="station">
       {!station && loadingContent}
       <h1>{station.name}</h1>
       <p>
-        Enter youtube video:{" "}
+        Search YouTube:
         <input onChange={(e) => setUrl(e.target.value)} value={url} />
       </p>
-      <button type="submit" onClick={addToQueue}>
+      <button type="submit" onClick={search}>
         Submit
       </button>
       {currentVideo && currentVideo.url && (
@@ -159,10 +175,29 @@ const Station = () => {
           .filter((item) => !item.played)
           .map((queueItem) => (
             <li key={queueItem.id}>
-              {queueItem.index}: {queueItem.url}
+              {queueItem.index}: {queueItem.title}
             </li>
           ))}
       </ul>
+
+      {searching && (
+        <div className="grid">
+          {searchResponse.map((response) => (
+            <div key={response.videoId} className="grid__item">
+              <Card
+                title={response.title}
+                imageUrl={response.thumbnailUrl}
+                onBodyClick={() => {
+                  addToQueue({
+                    videoId: response.videoId,
+                    title: response.title,
+                  });
+                }}
+              />
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
