@@ -10,8 +10,8 @@ function getAllStations() {
   return axios.get(url);
 }
 
-function retrieveStation(id) {
-  const url = `/partydj/api/v1/station/${id}`;
+function retrieveStation(stationUrl) {
+  const url = `/partydj/api/v1/station/url/${stationUrl}`;
   return axios.get(url);
 }
 
