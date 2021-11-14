@@ -18,11 +18,11 @@ const Station = () => {
   const [url, setUrl] = useState("");
   const [volume, setVolume] = useState(0);
 
-  const { id } = useParams();
+  const { stationUrl } = useParams();
 
   const setStationOnLoad = () => {
     return stationService
-      .retrieveStation(id)
+      .retrieveStation(stationUrl)
       .then((response) => setStation(response.data))
       .catch((error) => console.error(error));
   };

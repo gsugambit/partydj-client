@@ -18,7 +18,7 @@ const Stations = (props) => {
   );
 
   const onBodyClick = useCallback(
-    (stationId) => navigate(`/stations/${stationId}`),
+    (url) => navigate(`/stations/${url}`),
     [navigate]
   );
 
@@ -31,7 +31,7 @@ const Stations = (props) => {
               <Card
                 title={station.name}
                 onButtonClick={() => onButtonClick(station.id)}
-                onBodyClick={() => onBodyClick(station.id)}
+                onBodyClick={() => onBodyClick(station.url)}
                 buttonName={"Delete"}
               />
             </div>

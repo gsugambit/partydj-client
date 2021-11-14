@@ -36,7 +36,7 @@ function App() {
                 />
               }
             />
-            <Route path="/stations/:id" element={<Station />} />
+            <Route path="/stations/:stationUrl" element={<Station />} />
             <Route
               path="/create"
               element={<CreateStation refreshStations={refreshStations} />}

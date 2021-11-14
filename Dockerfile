@@ -1,5 +1,8 @@
 FROM node:12.18-alpine
 
+LABEL author="gsugambitcodes@gmail.com"
+LABEL twitch_stream="https://twitch.tv/GSUGambitCodes"
+
 # Default Environment. (Cloud Run defaults to 8080)
 ARG NODE_PORT=8080
 
