@@ -5,10 +5,10 @@ import PartyDJMain from "./pages/PartyDJMain";
 import Stations from "./pages/Stations";
 import Station from "./components/Station";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import CreateStation from "./pages/CreateStation";
 
 import stationService from "./services/StationService";
 import { useAsync } from "react-use";
+import Messages from "./pages/Messages";
 
 function App() {
   const [stations, setStations] = useState([]);
@@ -28,7 +28,7 @@ function App() {
           <Routes>
             <Route path="/" element={<PartyDJMain />} />
             <Route
-              path="/stations"
+              path="/dashboard"
               element={
                 <Stations
                   stations={stations}
@@ -37,10 +37,7 @@ function App() {
               }
             />
             <Route path="/stations/:stationUrl" element={<Station />} />
-            <Route
-              path="/create"
-              element={<CreateStation refreshStations={refreshStations} />}
-            />
+            <Route path="/messages" element={<Messages />} />
           </Routes>
         </div>
       </div>
