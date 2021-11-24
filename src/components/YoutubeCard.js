@@ -5,36 +5,22 @@ import {
   CardMedia,
   CardContent,
   CardActions,
+  IconButton,
   Typography,
 } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
-import "./Card.css";
-import { PrintOutlined } from "@mui/icons-material";
 
-const PartyDJCard = (props) => {
+const YoutubeCard = (props) => {
   return (
-    <Card>
-      <CardHeader title={props.title} />
-      {props.imageUrl && (
+    <Card variant="outlined" onClick={props.onClick}>
+      <CardHeader title={props.title} onClick={props.onTransition} />
+      <CardContent>
         <CardMedia
           component="img"
-          height="90"
-          width="120"
           image={props.imageUrl}
-          alt="youtube link"
+          width={props.imageHeight}
+          height={props.imageWidth}
         />
-      )}
-      {/* <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
-          Lizard
-        </Typography>
-      </CardContent> */}
-      <CardActions>
-        {props.onButtonClick && <DeleteIcon onClick={props.onButtonClick} />}
-        {props.onBodyClick && (
-          <Button onClick={props.onBodyClick}>{props.buttonName}</Button>
-        )}
-      </CardActions>
+      </CardContent>
     </Card>
     // <div className="card">
     //   <div className="card__body" onClick={props.onBodyClick}>
@@ -56,4 +42,4 @@ const PartyDJCard = (props) => {
   );
 };
 
-export default PartyDJCard;
+export default YoutubeCard;

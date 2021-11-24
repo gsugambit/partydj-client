@@ -5,35 +5,24 @@ import {
   CardMedia,
   CardContent,
   CardActions,
+  IconButton,
   Typography,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import "./Card.css";
-import { PrintOutlined } from "@mui/icons-material";
 
-const PartyDJCard = (props) => {
+import { makeStyles } from "@material-ui/styles";
+const useStyles = makeStyles((theme) => ({}));
+
+const StationCard = (props) => {
+  const classes = useStyles();
   return (
-    <Card>
-      <CardHeader title={props.title} />
-      {props.imageUrl && (
-        <CardMedia
-          component="img"
-          height="90"
-          width="120"
-          image={props.imageUrl}
-          alt="youtube link"
-        />
-      )}
-      {/* <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
-          Lizard
-        </Typography>
-      </CardContent> */}
+    <Card variant="outlined">
+      <CardHeader title={props.title} onClick={props.onTransition} />
       <CardActions>
-        {props.onButtonClick && <DeleteIcon onClick={props.onButtonClick} />}
-        {props.onBodyClick && (
-          <Button onClick={props.onBodyClick}>{props.buttonName}</Button>
-        )}
+        <IconButton onClick={props.onDelete}>
+          <DeleteIcon />
+        </IconButton>
       </CardActions>
     </Card>
     // <div className="card">
@@ -56,4 +45,4 @@ const PartyDJCard = (props) => {
   );
 };
 
-export default PartyDJCard;
+export default StationCard;

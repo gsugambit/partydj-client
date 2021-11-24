@@ -1,9 +1,16 @@
-import Card from "../components/Card";
+import StationCard from "../components/StationCard";
 import { useNavigate } from "react-router-dom";
 import { useCallback, useState } from "react";
 import stationService from "../services/StationService";
 
-import { Grid, TextField, Button, ButtonGroup, FormLabel } from "@mui/material";
+import {
+  Box,
+  Grid,
+  TextField,
+  Button,
+  ButtonGroup,
+  FormLabel,
+} from "@mui/material";
 
 import "./Stations.css";
 
@@ -98,28 +105,52 @@ const Stations = (props) => {
         </form>
       )}
       {!formOpen && (
-        <div className="grid">
-          {props.stations.map((station) => {
-            return (
-              <div key={station.id} className="station__item">
-                <Card
+        <Box>
+          <Grid>
+            <Button onClick={() => setFormOpen(true)}>Add Station</Button>
+          </Grid>
+          <Grid
+            container
+            direction="row"
+            justifyContent="flex-start"
+            alignItems="flex-start"
+            spacing={{ xs: 2, md: 3 }}
+            padding={{ xs: 2, md: 3 }}
+            border={"10px"}
+          >
+            {props.stations.map((station) => (
+              <Grid item key={station.id} xs={2} sm={4} md={4}>
+                <StationCard
                   title={station.name}
-                  onButtonClick={() => onButtonClick(station.id)}
-                  onBodyClick={() => onBodyClick(station.url)}
-                  buttonName={"Delete"}
+                  onTransition={() => onBodyClick(station.url)}
+                  onDelete={() => onButtonClick(station.id)}
                 />
-              </div>
-            );
-          })}
-          <div key={"create-a-station"} className="station__item">
-            <Card
-              title={"Add A Station"}
-              onButtonClick={() => setFormOpen(true)}
-              onBodyClick={() => {}}
-              buttonName={"Add"}
-            />
-          </div>
-        </div>
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
+
+        //  <div className="grid">
+        //   {props.stations.map((station) => {
+        //     return (
+        //       <div key={station.id} className="station__item">
+        //         <StationCard
+        //           title={station.name}
+        //           onTransition={() => onBodyClick(station.url)}
+        //           onDelete={() => onButtonClick(station.id)}
+        //         />
+        //       </div>
+        //     );
+        //   })}
+        //   { <div key={"create-a-station"} className="station__item">
+        //     <Station
+        //       title={"Add A Station"}
+        //       onButtonClick={() => setFormOpen(true)}
+        //       onBodyClick={() => {}}
+        //       buttonName={"Add"}
+        //     />
+        //   </div> }
+        //  </div>
       )}
     </div>
   );
