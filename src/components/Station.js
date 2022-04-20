@@ -2,13 +2,10 @@ import ReactPlayer from "react-player/youtube";
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
-import { Button } from "@mui/material";
-
+import Card from "../components/Card";
 import queueItemService from "../services/QueueItemService";
 import stationService from "../services/StationService";
 import youtubeSearchService from "../services/YoutubeSearchService";
-import YoutubeCard from "./YoutubeCard";
-
 import "./Station.css";
 
 const Station = () => {
@@ -141,7 +138,9 @@ const Station = () => {
         Search YouTube:
         <input onChange={(e) => setUrl(e.target.value)} value={url} />
       </p>
-      <Button onClick={search}>Submit</Button>
+      <button type="submit" onClick={search}>
+        Submit
+      </button>
       {currentVideo && currentVideo.url && (
         <div className="youtube">
           <ReactPlayer
@@ -158,21 +157,17 @@ const Station = () => {
         </div>
       )}
       {currentVideo && currentVideo.url && (
-        <Button onClick={() => setPlaying(playing ? false : true)}>
+        <button onClick={() => setPlaying(playing ? false : true)}>
           {playing ? "Pause" : "Play"}
-        </Button>
+        </button>
       )}
       {currentVideo && currentVideo.url && (
-        <Button onClick={(e) => endCurrentVideo(currentVideo, e)}>Skip</Button>
+        <button onClick={(e) => endCurrentVideo(currentVideo, e)}>Skip</button>
       )}
-      {queue && queue.length > 0 && (
-        <Button onClick={onClearQueue}>Clear Queue</Button>
-      )}
-      {currentVideo && currentVideo.url && (
-        <Button onClick={volumeControl}>
-          {volume === 0 ? "Unmute" : "Mute"}
-        </Button>
-      )}
+      <button onClick={onClearQueue}>Clear Queue</button>
+      <button onClick={volumeControl}>
+        {volume === 0 ? "Unmute" : "Mute"}
+      </button>
 
       <ul>
         {queue
@@ -189,12 +184,12 @@ const Station = () => {
         <div className="grid">
           {searchResponse.map((response) => (
             <div key={response.videoId} className="grid__item">
-              <YoutubeCard
+              <Card
                 title={response.title}
                 imageUrl={response.thumbnail.url}
                 imageHeight={response.thumbnail.height}
                 imageWidth={response.thumbnail.width}
-                onClick={() => {
+                onBodyClick={() => {
                   addToQueue({
                     videoId: response.videoId,
                     title: response.title,
